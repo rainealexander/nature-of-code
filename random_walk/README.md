@@ -1,4 +1,4 @@
-Example images from random walk exercises:
+# Example images from random walk exercises
 
 4-directional random walk
 
@@ -7,7 +7,6 @@ Example images from random walk exercises:
 8-directional random walk, with opacity to show multiple visits as darker squares
 
 ![eight_directional_walk](https://user-images.githubusercontent.com/67432346/160488915-b981f247-5a5b-4232-b42a-8572406fca10.png)
-
 
 A parameter error that turned into an interesting image
 

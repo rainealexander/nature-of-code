@@ -22,8 +22,8 @@ class Walker {
     let xDir = Math.floor(random(-1, 2)) * 10; // -10, 0, or 10
     let yDir = Math.floor(random(-1, 2)) * 10;
 
-    console.log(`xDir: ${xDir} yDir: ${yDir}`);
-    console.log(`this.x: ${this.x} this.y: ${this.y}`);
+    // console.log(`xDir: ${xDir} yDir: ${yDir}`);
+    // console.log(`this.x: ${this.x} this.y: ${this.y}`);
 
     this.x += xDir;
     this.y += yDir;
