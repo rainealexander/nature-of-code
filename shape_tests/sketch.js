@@ -14,9 +14,13 @@ const randomInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const hypotenuse = (point1, point2) => {
-  let a = Math.abs(point1.x - point2.x);
-  let b = Math.abs(point1.y, point2.y);
+// hypotenuse length for 45 degree angle
+const hypotenuse = (coords, sideLength) => {
+  let rad = degreesToRadians(45);
+  let x1 = sideLength * Math.cos(rad) + coords.x;
+  let y1 = sideLength * Math.sin(rad) + coords.y;
+  let a = Math.abs(coords.x - x1);
+  let b = Math.abs(coords.y - y1);
   return Math.sqrt(a * a + b * b);
 };
 
@@ -37,9 +41,10 @@ const ring = (origin, diameter, lineColor = 'black', fill = false, fillColor = '
 
 const corner = (cornerPoint, sideLength, angle, lineColor = 'black') => {
   // angle from corner to each end point
-  let rad1 = degreesToRadians(angle + 180);
-  let rad2 = degreesToRadians(angle - 90);
+  let rad1 = degreesToRadians(angle - 135);
+  let rad2 = degreesToRadians(angle + 135);
 
+  // angles are going clockwise??
   let x1 = sideLength * Math.cos(rad1) + cornerPoint.x;
   let y1 = sideLength * Math.sin(rad1) + cornerPoint.y;
 
@@ -57,6 +62,23 @@ const corner = (cornerPoint, sideLength, angle, lineColor = 'black') => {
 };
 
 const angleLine = (start, length, angle) => {
+  // clockwise angles??
+  // let distance = hypotenuse(start, length)
+  let x2, y2;
+  if (angle === 45) {
+    x2 = start.x + length;
+    y2 = start.y + length;
+  } else if (angle === 135) {
+    x2 = start.x - length;
+    y2 = start.y + length;
+  } else if (angle === 225) {
+    x2 = start.x - length;
+    y2 = start.y - length;
+  } else if (angle === 315) {
+    x2 = start.x + length;
+    y2 = start.y - length;
+  }
+  line(start.x, start.y, x2, y2);
 
 }
 
@@ -70,11 +92,16 @@ function setup() {
   drawShapes();
 }
 
+let radius = 10;
+// length of short side of isosceles right triangle
+let dist = Math.sqrt((radius * radius) / 2);
+
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
     for (let y = 20; y <= cHeight - 20; y += 40) {
       ring({x: x, y: y}, 20);
-      corner({x: x + 20, y: y - 20}, 10, -90);
+      corner({x: x + 20, y: y - 20}, 10, 45);
+      angleLine({x: x + dist, y: y + dist}, 16, 45);
     }
   }
 }
