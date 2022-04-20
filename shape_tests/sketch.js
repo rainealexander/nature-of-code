@@ -1,6 +1,12 @@
 
+// ____________________
+// | Global Variables |
+// `------------------'
+
 const cWidth = 800;
 const cHeight = 800;
+
+const angles = [0, 45, 90, 135, 180, 225, 270, 315];
 
 // ____________________
 // | Helper functions |
@@ -99,9 +105,10 @@ let dist = Math.sqrt((radius * radius) / 2);
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
     for (let y = 20; y <= cHeight - 20; y += 40) {
+      let angle1 = angles[Math.floor(Math.random() * angles.length)];
       ring({x: x, y: y}, 20);
-      corner({x: x + 20, y: y - 20}, 10, 45);
-      angleLine({x: x + dist, y: y + dist}, 16, 45);
+      corner({x: x + (radius + dist + 6), y: y - (radius + dist)}, 10, angle1);
+      angleLine({x: x + dist, y: y + dist}, 16, angle1);
     }
   }
 }
