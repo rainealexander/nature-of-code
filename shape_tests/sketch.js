@@ -67,20 +67,28 @@ const corner = (cornerPoint, sideLength, angle, lineColor = 'black') => {
 
 };
 
-const angleLine = (start, length, angle) => {
+const angleLine = (start, length, dist, angle) => {
   // clockwise angles??
   // let distance = hypotenuse(start, length)
   let x2, y2;
   if (angle === 45) {
+    start.x += dist;
+    start.y += dist;
     x2 = start.x + length;
     y2 = start.y + length;
   } else if (angle === 135) {
+    start.x -= dist;
+    start.y += dist;
     x2 = start.x - length;
     y2 = start.y + length;
   } else if (angle === 225) {
+    start.x -= dist;
+    start.y -= dist;
     x2 = start.x - length;
     y2 = start.y - length;
   } else if (angle === 315) {
+    start.x += dist;
+    start.y -= dist;
     x2 = start.x + length;
     y2 = start.y - length;
   }
@@ -99,16 +107,21 @@ function setup() {
 }
 
 let radius = 10;
+let diameter = radius * 2;
 // length of short side of isosceles right triangle
-let dist = Math.sqrt((radius * radius) / 2);
+let shortAngle = Math.sqrt((radius * radius) / 2);
+let longAngle = Math.sqrt((diameter * diameter) / 2);
+let ringChance = 0.85;
 
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
     for (let y = 20; y <= cHeight - 20; y += 40) {
       let angle1 = angles[Math.floor(Math.random() * angles.length)];
-      ring({x: x, y: y}, 20);
-      corner({x: x + (radius + dist + 6), y: y - (radius + dist)}, 10, angle1);
-      angleLine({x: x + dist, y: y + dist}, 16, angle1);
+      if (Math.random() < 0.75) {
+        ring({x: x, y: y}, 20);
+      }
+      corner({x: x + (shortAngle + longAngle), y: y - (shortAngle + longAngle)}, radius, angle1);
+      angleLine({x: x, y: y}, longAngle, shortAngle, angle1);
     }
   }
 }
