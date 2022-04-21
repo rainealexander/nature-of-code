@@ -52,22 +52,22 @@ const corner = (cornerPoint, sideLength, fromCenter, angle, lineColor = 'black')
 
   // 90 degree angled lines are not long enough
   if (angle === 0) {
-    cornerPoint.x += fromCenter;
+    cornerPoint.x += sideLength * 3;
   } else if (angle === 45) {
     cornerPoint.x += fromCenter;
     cornerPoint.y += fromCenter;
   } else if (angle === 90) {
-    cornerPoint.y += fromCenter;
+    cornerPoint.y += sideLength * 3;
   } else if (angle === 135) {
     cornerPoint.x -= fromCenter;
     cornerPoint.y += fromCenter;
   } else if (angle === 180) {
-    cornerPoint.x -= fromCenter;
+    cornerPoint.x -= sideLength * 3;
   } else if (angle === 225) {
     cornerPoint.x -= fromCenter;
     cornerPoint.y -= fromCenter;
   } else if (angle === 270) {
-    cornerPoint.y -= fromCenter;
+    cornerPoint.y -= sideLength * 3;
   } else if (angle === 315) {
     cornerPoint.x += fromCenter;
     cornerPoint.y -= fromCenter;
@@ -90,25 +90,41 @@ const corner = (cornerPoint, sideLength, fromCenter, angle, lineColor = 'black')
 
 };
 
-const angleLine = (start, length, dist, angle) => {
+const angleLine = (start, radius, length, dist, angle) => {
   // clockwise angles??
   // let distance = hypotenuse(start, length)
   let x2, y2;
-  if (angle === 45) {
+  if (angle === 0) {
+    start.x += radius;
+    x2 = start.x + radius * 2;
+    y2 = start.y;
+  } else if (angle === 45) {
     start.x += dist;
     start.y += dist;
     x2 = start.x + length;
     y2 = start.y + length;
+  } else if (angle === 90) {
+    start.y += radius;
+    x2 = start.x;
+    y2 = start.y + radius * 2;
   } else if (angle === 135) {
     start.x -= dist;
     start.y += dist;
     x2 = start.x - length;
     y2 = start.y + length;
+  } else if (angle === 180) {
+    start.x -= radius;
+    x2 = start.x - radius * 2;
+    y2 = start.y;
   } else if (angle === 225) {
     start.x -= dist;
     start.y -= dist;
     x2 = start.x - length;
     y2 = start.y - length;
+  } else if (angle === 270) {
+    start.y -= radius;
+    x2 = start.x;
+    y2 = start.y - radius * 2;
   } else if (angle === 315) {
     start.x += dist;
     start.y -= dist;
@@ -145,7 +161,7 @@ function drawShapes () {
         ring({x: x, y: y}, 20);
       }
       corner({x: x, y: y}, radius, toCorner, angle1);
-      angleLine({x: x, y: y}, longAngle, shortAngle, angle1);
+      angleLine({x: x, y: y}, radius, longAngle, shortAngle, angle1);
     }
   }
 }
