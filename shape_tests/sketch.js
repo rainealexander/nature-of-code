@@ -135,6 +135,49 @@ const angleLine = (start, radius, length, dist, angle) => {
 
 }
 
+const crossLine = (start, radius, shortAngle, angle = 0) => {
+  let x2, y2;
+  if (angle === 0) {
+    start.x += radius + shortAngle;
+    start.y -= shortAngle;
+    x2 = start.x;
+    y2 = start.y + shortAngle * 2;
+  } else if (angle === 45) {
+    start.x += dist;
+    start.y += dist;
+    x2 = start.x + length;
+    y2 = start.y + length;
+  } else if (angle === 90) {
+    start.y += radius;
+    x2 = start.x;
+    y2 = start.y + radius * 2;
+  } else if (angle === 135) {
+    start.x -= dist;
+    start.y += dist;
+    x2 = start.x - length;
+    y2 = start.y + length;
+  } else if (angle === 180) {
+    start.x -= radius;
+    x2 = start.x - radius * 2;
+    y2 = start.y;
+  } else if (angle === 225) {
+    start.x -= dist;
+    start.y -= dist;
+    x2 = start.x - length;
+    y2 = start.y - length;
+  } else if (angle === 270) {
+    start.y -= radius;
+    x2 = start.x;
+    y2 = start.y - radius * 2;
+  } else if (angle === 315) {
+    start.x += dist;
+    start.y -= dist;
+    x2 = start.x + length;
+    y2 = start.y - length;
+  }
+  line(start.x, start.y, x2, y2);
+}
+
 // _____________________
 // | Setup and Drawing |
 // `-------------------'
@@ -156,9 +199,11 @@ let ringChance = 0.90;
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
     for (let y = 20; y <= cHeight - 20; y += 40) {
+      let point = {x: x, y: y};
       let angle1 = angles[Math.floor(Math.random() * angles.length)];
       if (Math.random() < 0.75) {
         ring({x: x, y: y}, 20);
+        crossLine({x: x, y: y}, radius, shortAngle);
       }
       corner({x: x, y: y}, radius, toCorner, angle1);
       angleLine({x: x, y: y}, radius, longAngle, shortAngle, angle1);
