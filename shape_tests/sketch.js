@@ -45,10 +45,33 @@ const ring = (origin, diameter, lineColor = 'black', fill = false, fillColor = '
   circle(origin.x, origin.y, diameter);
 };
 
-const corner = (cornerPoint, sideLength, angle, lineColor = 'black') => {
+const corner = (cornerPoint, sideLength, fromCenter, angle, lineColor = 'black') => {
   // angle from corner to each end point
   let rad1 = degreesToRadians(angle - 135);
   let rad2 = degreesToRadians(angle + 135);
+
+  // 90 degree angled lines are not long enough
+  if (angle === 0) {
+    cornerPoint.x += fromCenter;
+  } else if (angle === 45) {
+    cornerPoint.x += fromCenter;
+    cornerPoint.y += fromCenter;
+  } else if (angle === 90) {
+    cornerPoint.y += fromCenter;
+  } else if (angle === 135) {
+    cornerPoint.x -= fromCenter;
+    cornerPoint.y += fromCenter;
+  } else if (angle === 180) {
+    cornerPoint.x -= fromCenter;
+  } else if (angle === 225) {
+    cornerPoint.x -= fromCenter;
+    cornerPoint.y -= fromCenter;
+  } else if (angle === 270) {
+    cornerPoint.y -= fromCenter;
+  } else if (angle === 315) {
+    cornerPoint.x += fromCenter;
+    cornerPoint.y -= fromCenter;
+  }
 
   // angles are going clockwise??
   let x1 = sideLength * Math.cos(rad1) + cornerPoint.x;
@@ -111,7 +134,8 @@ let diameter = radius * 2;
 // length of short side of isosceles right triangle
 let shortAngle = Math.sqrt((radius * radius) / 2);
 let longAngle = Math.sqrt((diameter * diameter) / 2);
-let ringChance = 0.85;
+let toCorner = shortAngle + longAngle;
+let ringChance = 0.90;
 
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
@@ -120,7 +144,7 @@ function drawShapes () {
       if (Math.random() < 0.75) {
         ring({x: x, y: y}, 20);
       }
-      corner({x: x + (shortAngle + longAngle), y: y - (shortAngle + longAngle)}, radius, angle1);
+      corner({x: x, y: y}, radius, toCorner, angle1);
       angleLine({x: x, y: y}, longAngle, shortAngle, angle1);
     }
   }
