@@ -135,8 +135,12 @@ const angleLine = (start, radius, length, dist, angle) => {
 
 }
 
-const crossLine = (start, radius, shortAngle, angle = 0) => {
+const crossLine = (start, radius, shortAngle, angle) => {
   let x2, y2;
+  let angles = [0, 90, 180, 270];
+  if (angle === undefined) {
+    angle = angles[Math.floor(Math.random() * 4)];
+  }
   if (angle === 0) {
     start.x += radius + shortAngle;
     start.y -= shortAngle;
@@ -148,27 +152,30 @@ const crossLine = (start, radius, shortAngle, angle = 0) => {
     x2 = start.x + length;
     y2 = start.y + length;
   } else if (angle === 90) {
-    start.y += radius;
-    x2 = start.x;
-    y2 = start.y + radius * 2;
+    start.x -= shortAngle;
+    start.y += radius + shortAngle;
+    x2 = start.x + shortAngle * 2;
+    y2 = start.y;
   } else if (angle === 135) {
     start.x -= dist;
     start.y += dist;
     x2 = start.x - length;
     y2 = start.y + length;
   } else if (angle === 180) {
-    start.x -= radius;
-    x2 = start.x - radius * 2;
-    y2 = start.y;
+    start.x -= radius + shortAngle;
+    start.y += shortAngle;
+    x2 = start.x;
+    y2 = start.y - shortAngle * 2;
   } else if (angle === 225) {
     start.x -= dist;
     start.y -= dist;
     x2 = start.x - length;
     y2 = start.y - length;
   } else if (angle === 270) {
-    start.y -= radius;
-    x2 = start.x;
-    y2 = start.y - radius * 2;
+    start.x -= shortAngle;
+    start.y += radius + shortAngle;
+    x2 = start.x + shortAngle * 2;
+    y2 = start.y;
   } else if (angle === 315) {
     start.x += dist;
     start.y -= dist;
