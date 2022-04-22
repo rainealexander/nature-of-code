@@ -173,7 +173,7 @@ const crossLine = (start, radius, shortAngle, angle) => {
     y2 = start.y - length;
   } else if (angle === 270) {
     start.x -= shortAngle;
-    start.y += radius + shortAngle;
+    start.y -= radius + shortAngle;
     x2 = start.x + shortAngle * 2;
     y2 = start.y;
   } else if (angle === 315) {
