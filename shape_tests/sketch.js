@@ -212,7 +212,9 @@ function drawShapes () {
         ring({x: x, y: y}, 20);
         crossLine({x: x, y: y}, radius, shortAngle);
       }
-      corner({x: x, y: y}, radius, toCorner, angle1);
+      if (Math.random() < 0.6) {
+        corner({x: x, y: y}, radius, toCorner, angle1);
+      }
       angleLine({x: x, y: y}, radius, longAngle, shortAngle, angle1);
     }
   }
