@@ -206,16 +206,20 @@ let ringChance = 0.90;
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
     for (let y = 20; y <= cHeight - 20; y += 40) {
-      let point = {x: x, y: y};
+      let point = createVector(x, y);
       let angle1 = angles[Math.floor(Math.random() * angles.length)];
+      let angle2 = angles[Math.floor(Math.random() * angles.length)];
       if (Math.random() < 0.75) {
         ring({x: x, y: y}, 20);
+      }
+      if(Math.random() < 0.7) {
         crossLine({x: x, y: y}, radius, shortAngle);
       }
       if (Math.random() < 0.6) {
         corner({x: x, y: y}, radius, toCorner, angle1);
       }
-      angleLine({x: x, y: y}, radius, longAngle, shortAngle, angle1);
+      angleLine({x: x, y: y}, radius, longAngle, shortAngle, 
+        Math.random() > 0.6 ? angle1 : angle2);
     }
   }
 }
