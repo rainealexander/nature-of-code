@@ -137,9 +137,8 @@ const angleLine = (start, radius, length, dist, angle) => {
 
 const crossLine = (start, radius, shortAngle, angle) => {
   let x2, y2;
-  let angles = [0, 90, 180, 270];
   if (angle === undefined) {
-    angle = angles[Math.floor(Math.random() * 4)];
+    angle = angles[Math.floor(Math.random() * 8)];
   }
   if (angle === 0) {
     start.x += radius + shortAngle;
@@ -147,40 +146,40 @@ const crossLine = (start, radius, shortAngle, angle) => {
     x2 = start.x;
     y2 = start.y + shortAngle * 2;
   } else if (angle === 45) {
-    start.x += dist;
-    start.y += dist;
-    x2 = start.x + length;
-    y2 = start.y + length;
+    start.x += radius + shortAngle;
+    start.y += shortAngle;
+    x2 = start.x - radius;
+    y2 = start.y + radius;
   } else if (angle === 90) {
-    start.x -= shortAngle;
+    start.x += shortAngle;
     start.y += radius + shortAngle;
-    x2 = start.x + shortAngle * 2;
+    x2 = start.x - shortAngle * 2;
     y2 = start.y;
   } else if (angle === 135) {
-    start.x -= dist;
-    start.y += dist;
-    x2 = start.x - length;
-    y2 = start.y + length;
+    start.x -= shortAngle;
+    start.y += radius + shortAngle;
+    x2 = start.x - radius;
+    y2 = start.y - radius;
   } else if (angle === 180) {
     start.x -= radius + shortAngle;
     start.y += shortAngle;
     x2 = start.x;
     y2 = start.y - shortAngle * 2;
   } else if (angle === 225) {
-    start.x -= dist;
-    start.y -= dist;
-    x2 = start.x - length;
-    y2 = start.y - length;
+    start.x -= radius + shortAngle;
+    start.y -= shortAngle;
+    x2 = start.x + radius;
+    y2 = start.y - radius;
   } else if (angle === 270) {
     start.x -= shortAngle;
     start.y -= radius + shortAngle;
     x2 = start.x + shortAngle * 2;
     y2 = start.y;
   } else if (angle === 315) {
-    start.x += dist;
-    start.y -= dist;
-    x2 = start.x + length;
-    y2 = start.y - length;
+    start.x += shortAngle;
+    start.y -= radius + shortAngle;
+    x2 = start.x + radius;
+    y2 = start.y + radius;
   }
   line(start.x, start.y, x2, y2);
 }
@@ -199,9 +198,10 @@ let radius = 10;
 let diameter = radius * 2;
 // length of short side of isosceles right triangle
 let shortAngle = Math.sqrt((radius * radius) / 2);
+let radiusHyp = Math.sqrt(radius * radius * 2);
 let longAngle = Math.sqrt((diameter * diameter) / 2);
 let toCorner = shortAngle + longAngle;
-let ringChance = 0.90;
+let ringChance = 0.75;
 
 function drawShapes () {
   for (let x = 20; x <= cWidth - 20; x += 40) {
@@ -209,14 +209,26 @@ function drawShapes () {
       let point = createVector(x, y);
       let angle1 = angles[Math.floor(Math.random() * angles.length)];
       let angle2 = angles[Math.floor(Math.random() * angles.length)];
-      if (Math.random() < 0.75) {
+      if (Math.random() < ringChance) {
         ring({x: x, y: y}, 20);
       }
-      if(Math.random() < 0.7) {
+      if(Math.random() < 0.68) {
         crossLine({x: x, y: y}, radius, shortAngle);
+        if(Math.random() < 0.38) {
+          crossLine({x: x, y: y}, radius, shortAngle);
+          if(Math.random() < 0.35) {
+            crossLine({x: x, y: y}, radius, shortAngle);
+            if(Math.random() < 0.35) {
+              crossLine({x: x, y: y}, radius, shortAngle);
+            }
+          }
+        }
       }
       if (Math.random() < 0.6) {
         corner({x: x, y: y}, radius, toCorner, angle1);
+        if (Math.random() < 0.33) {
+          corner({x: x, y: y}, radius, toCorner, angle1);
+        }
       }
       angleLine({x: x, y: y}, radius, longAngle, shortAngle, 
         Math.random() > 0.6 ? angle1 : angle2);
