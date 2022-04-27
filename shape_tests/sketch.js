@@ -30,6 +30,14 @@ const hypotenuse = (coords, sideLength) => {
   return Math.sqrt(a * a + b * b);
 };
 
+const randomRGBVal = () => {
+  return Math.floor(Math.random() * 255);
+}
+
+const visibleGray = () => {
+  return Math.floor(Math.random() * 240);
+}
+
 // ___________________
 // | Shape functions |
 // `-----------------'
@@ -152,13 +160,13 @@ const drawX = (middlePoint, sideLength, fromCenter, shortSide, angle, lineColor 
 
 };
 
-const angleLine = (start, radius, long, short, angle) => {
+const angleLine = (start, radius, short, angle, lineColor = 'black') => {
   // clockwise angles??
   // let distance = hypotenuse(start, length)
   // angle = Math.floor(Math.random() * 360);
   let rads = degreesToRadians(angle);
 
-  let dist = Math.random() > 0.4 ? long : short;
+  let dist = Math.random() > 0.4 ? (radius * 2) : short;
 
   let x1 = radius * Math.cos(rads) + start.x;
   let y1 = radius * Math.sin(rads) + start.y;
@@ -166,11 +174,12 @@ const angleLine = (start, radius, long, short, angle) => {
   let x2 = dist * Math.cos(rads) + x1;
   let y2 = dist * Math.sin(rads) + y1;  
 
+  stroke(lineColor);
   line(x1, y1, x2, y2);
 
 }
 
-const crossLine = (start, radius, shortAngle, angle) => {
+const crossLine = (start, radius, shortAngle, angle, lineColor = 'black') => {
   if (angle === undefined) {
     angle = angles[Math.floor(Math.random() * 8)];
   }
@@ -182,6 +191,7 @@ const crossLine = (start, radius, shortAngle, angle) => {
   let x2 = shortAngle * 2 * Math.cos(rads2) + x1;
   let y2 = shortAngle * 2 * Math.sin(rads2) + y1;  
   
+  stroke(lineColor);
   line(x1, y1, x2, y2);
 }
 
@@ -205,41 +215,53 @@ let toCorner = shortAngle + longAngle;
 let shortLine = shortAngle * 2;
 let ringChance = 0.75;
 
+let counter = 0;
+let grayscaleVal = counter;
+let r, g, b;
+
 function drawShapes () {
-  for (let x = 20; x <= cWidth - 20; x += 40) {
-    for (let y = 20; y <= cHeight - 20; y += 40) {
+  for (let y = 20; y <= cWidth - 20; y += 40) {
+    for (let x = 20; x <= cHeight - 20; x += 40) {
       let crossLineFlag = false;
-      let cornerFlag = false;      let point = createVector(x, y);
+      let cornerFlag = false;
+      //grayscaleVal = visibleGray();
+      r = Math.floor(counter);
+      g = randomRGBVal();
+      b = Math.ceil(255 - counter);
+      colorVal = 'rgb(' + r + ',' + g + ',' + b + ')';
+      let point = createVector(x, y);
       let angle1 = angles[Math.floor(Math.random() * angles.length)];
       let angle2 = angles[Math.floor(Math.random() * angles.length)];
       if (Math.random() < ringChance) {
-        ring({x: x, y: y}, 20);
+        ring({x: x, y: y}, 20, colorVal);
       }
       if(Math.random() < 0.68) {
         crossLineFlag = true;
-        crossLine({x: x, y: y}, radius, shortAngle);
+        crossLine({x: x, y: y}, radius, shortAngle, undefined, colorVal);
         if(Math.random() < 0.38) {
-          crossLine({x: x, y: y}, radius, shortAngle);
+          crossLine({x: x, y: y}, radius, shortAngle, undefined, colorVal);
           if(Math.random() < 0.35) {
-            crossLine({x: x, y: y}, radius, shortAngle);
+            crossLine({x: x, y: y}, radius, shortAngle, undefined, colorVal);
             if(Math.random() < 0.35) {
-              crossLine({x: x, y: y}, radius, shortAngle);
+              crossLine({x: x, y: y}, radius, shortAngle, undefined, colorVal);
             }
           }
         }
       }
       if (Math.random() < 0.6) {
         cornerFlag = true;
-        corner({x: x, y: y}, radius, toCorner, angle1);
+        corner({x: x, y: y}, radius, toCorner, angle1, colorVal);
         if (Math.random() < 0.33) {
-          corner({x: x, y: y}, radius, toCorner, angle1);
+          corner({x: x, y: y}, radius, toCorner, angle1, colorVal);
         }
       }
       if (!cornerFlag && !crossLineFlag) {
-        drawX({x: x, y: y}, radius, shortLine, shortAngle);
+        drawX({x: x, y: y}, radius, shortLine, shortAngle, undefined, colorVal);
       }
-      angleLine({x: x, y: y}, radius, longAngle, shortAngle, 
-        Math.random() > 0.6 ? angle1 : angle2);
+      angleLine({x: x, y: y}, radius, shortAngle, 
+        Math.random() > 0.6 ? angle1 : angle2, colorVal);
+
+      counter += 0.5;
     }
   }
 }
